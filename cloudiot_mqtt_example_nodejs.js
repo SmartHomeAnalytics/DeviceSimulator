@@ -86,7 +86,13 @@ const publishAsync = (
   }
 
   setTimeout(() => {
-    const payload = `${argv.registryId}/${argv.deviceId}-payload-${messagesSent}`;
+    // TODO: Add publishing logic here
+    const payloadData = {
+      deviceId: argv.deviceId,
+      litersPerMinute: 10 + Math.random() * 5
+    }
+
+    const payload = JSON.stringify(payloadData)
 
     // Publish "payload" to the MQTT topic. qos=1 means at least once delivery.
     // Cloud IoT Core also supports qos=0 for at most once delivery.
@@ -231,7 +237,7 @@ const mqttDeviceDemo = (
   // required to be in the format below. The topic name must end in 'state' to
   // publish state and 'events' to publish telemetry. Note that this is not the
   // same as the device registry's Cloud Pub/Sub topic.
-  const mqttTopic = `/topics/water-meter`;
+  const mqttTopic = `/devices/${deviceId}/${messageType}`;
 
   client.on('connect', success => {
     console.log('connect');
